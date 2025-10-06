@@ -578,6 +578,7 @@ make_pred_grid <- function(nr, nc, fit) {
 build_contour_plot <- function(grid_df, title = "Contorno CV", nr, nc,
                                mark = NULL, mark_col = "red", mark_lab = NULL) {
   grid_df <- subset(grid_df, is.finite(CV_pred))
+  Ancho <- NULL
   p <- ggplot(grid_df, aes(Largo, Ancho, z = CV_pred)) +
     geom_contour_filled(bins = 12) +
     scale_fill_viridis_d(name = "CV pred") +

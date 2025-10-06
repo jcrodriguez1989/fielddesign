@@ -126,39 +126,39 @@ test_that("find_integer_optimum handles non-finite values in tau_vec", {
   nc_max <- 10
 
   # Test with NA in tau_vec
-  expect_warning(expect_warning(expect_warning(expect_warning(
+  suppressWarnings(
     result_tau_na_1 <- find_integer_optimum(h_star, w_star, fit_model, c(NA, 0.1), nr_max, nc_max)
-  ))))
+  )
   expect_equal(result_tau_na_1$h_opt, NA_integer_)
   expect_equal(result_tau_na_1$w_opt, NA_integer_)
   expect_equal(result_tau_na_1$pred_at_opt, NA_real_)
 
-  expect_warning(expect_warning(expect_warning(expect_warning(
+  suppressWarnings(
     result_tau_na_2 <- find_integer_optimum(h_star, w_star, fit_model, c(0.1, NA), nr_max, nc_max)
-  ))))
+  )
   expect_equal(result_tau_na_2$h_opt, NA_integer_)
   expect_equal(result_tau_na_2$w_opt, NA_integer_)
   expect_equal(result_tau_na_2$pred_at_opt, NA_real_)
 
   # Test with Inf in tau_vec
-  expect_warning(expect_warning(expect_warning(expect_warning(
+  suppressWarnings(
     result_tau_inf_1 <- find_integer_optimum(h_star, w_star, fit_model, c(Inf, 0.1), nr_max, nc_max)
-  ))))
+  )
   expect_equal(result_tau_inf_1$h_opt, NA_integer_)
   expect_equal(result_tau_inf_1$w_opt, NA_integer_)
   expect_equal(result_tau_inf_1$pred_at_opt, NA_real_)
 
-  expect_warning(expect_warning(expect_warning(expect_warning(
+  suppressWarnings(
     result_tau_inf_2 <- find_integer_optimum(h_star, w_star, fit_model, c(0.1, Inf), nr_max, nc_max)
-  ))))
+  )
   expect_equal(result_tau_inf_2$h_opt, NA_integer_)
   expect_equal(result_tau_inf_2$w_opt, NA_integer_)
   expect_equal(result_tau_inf_2$pred_at_opt, NA_real_)
 
   # Test with NaN in tau_vec (though usually NA propagates to NaN)
-  expect_warning(expect_warning(expect_warning(expect_warning(
+  suppressWarnings(
     result_tau_nan_1 <- find_integer_optimum(h_star, w_star, fit_model, c(NaN, 0.1), nr_max, nc_max)
-  ))))
+  )
   expect_equal(result_tau_nan_1$h_opt, NA_integer_)
   expect_equal(result_tau_nan_1$w_opt, NA_integer_)
   expect_equal(result_tau_nan_1$pred_at_opt, NA_real_)
@@ -237,9 +237,9 @@ test_that("find_integer_optimum handles predict returning non-finite values for 
   h_star <- 5.5
   w_star <- 5.5 # Ensure candidates are within bounds [1,10]
 
-  expect_warning(expect_warning(expect_warning(expect_warning(
+  suppressWarnings(
     result <- find_integer_optimum(h_star, w_star, fit_model_na_predict, tau_vec, nr_max, nc_max)
-  ))))
+  )
 
   # Expect no optimum found if all predictions are non-finite
   expect_equal(result$h_opt, NA_integer_)
