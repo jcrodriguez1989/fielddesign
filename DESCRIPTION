@@ -1,6 +1,6 @@
 Package: fielddesign
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Tools for Spatial Variation Analysis and Optimal Plot Size
 Version: 0.1.0
 Authors@R: c(
     person(
@@ -15,8 +15,9 @@ Authors@R: c(
     )
   )
 Maintainer: Juan Cruz Rodriguez <jcrodriguez@unc.edu.ar>
-Description: More about what it does (maybe more than one line).
-  Continuation lines should be indented.
+Description: Provides functions for analyzing spatial variation in field experiments,
+  including methods for exhaustive search and tiling, and tools to determine optimal plot
+  size and visualize coefficient of variation contours.
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true

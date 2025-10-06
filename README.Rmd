@@ -4,6 +4,11 @@ output: github_document
 
 # fielddesign
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/jcrodriguez1989/fielddesign/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jcrodriguez1989/fielddesign/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/jcrodriguez1989/fielddesign/graph/badge.svg)](https://app.codecov.io/gh/jcrodriguez1989/fielddesign)
+<!-- badges: end -->
+
 ## Installation
 
 Install the development version of `{fielddesign}` from [GitHub](https://github.com/jcrodriguez1989/fielddesign) with:
@@ -11,4 +16,140 @@ Install the development version of `{fielddesign}` from [GitHub](https://github.
 ```{r eval = FALSE}
 # install.packages("remotes")
 remotes::install_github("jcrodriguez1989/fielddesign")
+```
+
+## Example
+
+```{r}
+# Load the package.
+library("fielddesign")
+
+# Generate simulated data.
+set.seed(420)
+nr <- 10
+nc <- 10
+x <- matrix(rnorm(nr * nc, 500, 60), nrow = nr, ncol = nc)
+
+# Calculate the exhaustive spatial variation.
+sv_exh <- spatial_variation_exhaustive(x)$res
+head(sv_exh, 10)
+
+# Calculate the optimal plot size.
+exh_ops_int <- fit_exhaustive_optimal_plot_size(sv_exh, nr, nc)
+exh_ops_no_int <- fit_exhaustive_optimal_plot_size(sv_exh, nr, nc, include_interaction = FALSE)
+
+anova(exh_ops_no_int$fit, exh_ops_int$fit)
+AIC(exh_ops_no_int$fit, exh_ops_int$fit)
+
+message(sprintf(
+  " With interaction  (continuous): L*= %.2f W*= %.2f  | rounded: %d %d",
+  exh_ops_int$h_star, exh_ops_int$w_star,
+  as.integer(ceiling(exh_ops_int$h_star)), as.integer(ceiling(exh_ops_int$w_star))
+))
+message(sprintf(
+  " Without interaction  (continuous): L*= %.2f W*= %.2f  | rounded: %d %d",
+  exh_ops_no_int$h_star, exh_ops_no_int$w_star,
+  as.integer(ceiling(exh_ops_no_int$h_star)), as.integer(ceiling(exh_ops_no_int$w_star))
+))
+
+# Calculate the tiling spatial variation.
+sv_tiling <- spatial_variation_tiling(x)$res
+head(sv_tiling, 10)
+
+# Calculate the optimal plot size.
+opt_til_int_cont <- fit_exhaustive_optimal_plot_size(sv_tiling, nr, nc)
+opt_til_no_int_cont <- fit_exhaustive_optimal_plot_size(
+  sv_tiling, nr, nc,
+  include_interaction = FALSE
+)
+
+reg_int <- opt_til_int_cont$fit
+reg_no_int <- opt_til_no_int_cont$fit
+
+message(sprintf(
+  " With interaction  (continuous): L*= %.2f W*= %.2f  | rounded: %d %d",
+  opt_til_int_cont$h_star, opt_til_int_cont$w_star,
+  as.integer(ceiling(opt_til_int_cont$h_star)), as.integer(ceiling(opt_til_int_cont$w_star))
+))
+message(sprintf(
+  " Without interaction  (continuous): L*= %.2f W*= %.2f  | rounded: %d %d",
+  opt_til_no_int_cont$h_star, opt_til_no_int_cont$w_star,
+  as.integer(ceiling(opt_til_no_int_cont$h_star)), as.integer(ceiling(opt_til_no_int_cont$w_star))
+))
+
+# Models comparison.
+message("\n[TILING] Models comparison (ANOVA + AIC)")
+anova(reg_no_int, reg_int)
+AIC(reg_no_int, reg_int)
+
+sv_exh_cmp <- sv_exh[, c("Length", "Width", "Size", "CV")]
+names(sv_exh_cmp)[4] <- "CV_exh"
+tab_til_cmp <- sv_tiling[, c("Length", "Width", "CV")]
+names(tab_til_cmp)[3] <- "CV_til"
+comp <- merge(sv_exh_cmp, tab_til_cmp, by = c("Length", "Width"))
+message(sprintf("n intersection = %d", nrow(comp)))
+message(sprintf("Correlation: %.4f", cor(comp$CV_exh, comp$CV_til, use = "complete.obs")))
+message(sprintf("Mean bias (exh - til): %.4f", mean(comp$CV_exh - comp$CV_til, na.rm = TRUE)))
+message(
+  sprintf("Median bias (exh - til): %.4f", median(comp$CV_exh - comp$CV_til, na.rm = TRUE))
+)
+
+# CV Plots.
+plot_cv_contour(
+  exh_ops_int$fit,
+  nr = nr, nc = nc,
+  title = "EXHAUSTIVE — CV Contour (With interaction)",
+  mark = data.frame(Length = exh_ops_int$h_opt, Width = exh_ops_int$w_opt),
+  mark_col = "red",
+  mark_lab = paste0("optimal (L=", exh_ops_int$h_opt, ", W=", exh_ops_int$w_opt, ")")
+)
+
+plot_cv_contour(
+  exh_ops_no_int$fit,
+  nr = nr, nc = nc,
+  title = "EXHAUSTIVE — CV Contour (Without interaction)",
+  mark = data.frame(Length = exh_ops_no_int$h_opt, Width = exh_ops_no_int$w_opt),
+  mark_col = "blue",
+  mark_lab = paste0("optimal (L=", exh_ops_no_int$h_opt, ", W=", exh_ops_no_int$w_opt, ")")
+)
+
+# Tiling.
+L_i <- ceiling(opt_til_int_cont$h_star)
+W_i <- ceiling(opt_til_int_cont$w_star)
+mark_i <- if (is.na(L_i) || is.na(W_i)) NULL else data.frame(Length = L_i, Width = W_i)
+plot_cv_contour(
+  reg_int,
+  nr = nr, nc = nc,
+  title = "TILING — CV Contour (With interaction)",
+  mark = mark_i,
+  mark_col = "grey30",
+  mark_lab = if (is.null(mark_i)) NULL else paste0("optimo (L=", L_i, ", W=", W_i, ")")
+) +
+  ggplot2::annotate(
+    "segment",
+    x = 1, xend = L_i, y = W_i, yend = W_i, linetype = "dashed", colour = "grey30"
+  ) +
+  ggplot2::annotate(
+    "segment",
+    x = L_i, xend = L_i, y = 1, yend = W_i, linetype = "dashed", colour = "grey30"
+  ) +
+  ggplot2::geom_point(
+    data = mark_i, ggplot2::aes(x = Length, y = Width),
+    inherit.aes = FALSE, shape = 16, size = 4, colour = "grey30"
+  )
+```
+
+## Compare with `agricolae::index.smith()`
+
+```{r}
+# Load the {agricolae} package.
+library("agricolae")
+data(rice)
+# Check that our method and index.smith are the same.
+sv_tiling <- fielddesign::spatial_variation_tiling(rice)$res
+sv_tiling_a <- agricolae::index.smith(rice, PLOT = FALSE)$uniformity
+# Make the structures comparable.
+rownames(sv_tiling) <- NULL
+sv_tiling$CV <- round(sv_tiling$CV, 1)
+all.equal(sv_tiling_a, as.matrix(sv_tiling))
 ```
