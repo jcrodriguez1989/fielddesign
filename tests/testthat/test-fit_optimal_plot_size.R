@@ -11,14 +11,14 @@ create_test_sv <- function(nr, nc, center_l, center_w, scale_factor = 0.1, base_
   return(sv_data)
 }
 
-test_that("fit_exhaustive_optimal_plot_size - analytical solution is valid and within bounds", {
+test_that("fit_optimal_plot_size - analytical solution is valid and within bounds", {
   nr <- 10
   nc <- 10
   tau <- c(1, 1)
   scale_factor <- 0.1
   # Choose center_l=8, center_w=8 so that h_star = 3, w_star = 3 (within [1,10]).
   sv <- create_test_sv(nr, nc, center_l = 8, center_w = 8, scale_factor = scale_factor)
-  result <- fit_exhaustive_optimal_plot_size(sv, nr, nc, include_interaction = TRUE, tau = tau)
+  result <- fit_optimal_plot_size(sv, nr, nc, include_interaction = TRUE, tau = tau)
   expect_s3_class(result$fit, "lm")
   expect_equal(result$method_used, "analytical")
   # h_star and w_star should be close to 3.
@@ -29,7 +29,7 @@ test_that("fit_exhaustive_optimal_plot_size - analytical solution is valid and w
   expect_equal(result$w_opt, 3)
 })
 
-test_that("fit_exhaustive_optimal_plot_size - falls back to constrained optimization", {
+test_that("fit_optimal_plot_size - falls back to constrained optimization", {
   nr <- 10
   nc <- 10
   tau <- c(1, 1)
@@ -37,7 +37,7 @@ test_that("fit_exhaustive_optimal_plot_size - falls back to constrained optimiza
   sv <- create_test_sv(nr, nc, center_l = 4, center_w = 4, scale_factor = scale_factor)
   expect_message(
     {
-      result <- fit_exhaustive_optimal_plot_size(sv, nr, nc, include_interaction = TRUE, tau = tau)
+      result <- fit_optimal_plot_size(sv, nr, nc, include_interaction = TRUE, tau = tau)
     },
     "Analytical solution invalid or out of bounds. Using constrained optimization..."
   )
@@ -50,7 +50,7 @@ test_that("fit_exhaustive_optimal_plot_size - falls back to constrained optimiza
   expect_equal(result$w_opt, 1)
 })
 
-test_that("fit_exhaustive_optimal_plot_size - falls back to constrained optimization", {
+test_that("fit_optimal_plot_size - falls back to constrained optimization", {
   nr <- 10
   nc <- 10
   tau <- c(1, 1)
@@ -58,7 +58,7 @@ test_that("fit_exhaustive_optimal_plot_size - falls back to constrained optimiza
   sv <- create_test_sv(nr, nc, center_l = 18, center_w = 18, scale_factor = scale_factor)
   expect_message(
     {
-      result <- fit_exhaustive_optimal_plot_size(sv, nr, nc, include_interaction = TRUE, tau = tau)
+      result <- fit_optimal_plot_size(sv, nr, nc, include_interaction = TRUE, tau = tau)
     },
     "Analytical solution invalid or out of bounds. Using constrained optimization..."
   )
@@ -72,14 +72,14 @@ test_that("fit_exhaustive_optimal_plot_size - falls back to constrained optimiza
 })
 
 
-test_that("fit_exhaustive_optimal_plot_size - works with no interaction term", {
+test_that("fit_optimal_plot_size - works with no interaction term", {
   nr <- 10
   nc <- 10
   tau <- c(1, 1)
   scale_factor <- 0.1
   # Choose center_l=8, center_w=8 so that h_star = 3, w_star = 3 (within [1,10])
   sv <- create_test_sv(nr, nc, center_l = 8, center_w = 8, scale_factor = scale_factor)
-  result <- fit_exhaustive_optimal_plot_size(sv, nr, nc, include_interaction = FALSE, tau = tau)
+  result <- fit_optimal_plot_size(sv, nr, nc, include_interaction = FALSE, tau = tau)
   expect_s3_class(result$fit, "lm")
   expect_equal(result$method_used, "analytical")
   expect_equal(result$h_star, 3)
@@ -90,25 +90,25 @@ test_that("fit_exhaustive_optimal_plot_size - works with no interaction term", {
   expect_false(any(grepl("Length:Width", as.character(formula(result$fit)))))
 })
 
-test_that("fit_exhaustive_optimal_plot_size - handles unresolvable cases by returning NA", {
+test_that("fit_optimal_plot_size - handles unresolvable cases by returning NA", {
   nr <- 10
   nc <- 10
   tau <- c(1, 1)
   # Create `sv` data with NA CVs, which should lead to `lm` failing and then NA results.
   sv_na_cv <- expand.grid(Length = 1:nr, Width = 1:nc)
   sv_na_cv$CV <- NA_real_
-  expect_error(fit_exhaustive_optimal_plot_size(
+  expect_error(fit_optimal_plot_size(
     sv_na_cv, nr, nc,
     include_interaction = TRUE, tau = tau
   ))
-  expect_error(fit_exhaustive_optimal_plot_size(
+  expect_error(fit_optimal_plot_size(
     sv_na_cv, nr, nc,
     include_interaction = FALSE, tau = tau
   ))
 })
 
 # Add test for when nr or nc are very small, leading to edge cases.
-test_that("fit_exhaustive_optimal_plot_size - handles small nr/nc dimensions", {
+test_that("fit_optimal_plot_size - handles small nr/nc dimensions", {
   nr <- 2
   nc <- 2
   tau <- c(1, 1)
@@ -117,7 +117,7 @@ test_that("fit_exhaustive_optimal_plot_size - handles small nr/nc dimensions", {
   sv <- create_test_sv(nr, nc, center_l = 8, center_w = 8, scale_factor = scale_factor)
   suppressWarnings(expect_message(
     {
-      result <- fit_exhaustive_optimal_plot_size(sv, nr, nc, include_interaction = TRUE, tau = tau)
+      result <- fit_optimal_plot_size(sv, nr, nc, include_interaction = TRUE, tau = tau)
     },
     "Analytical solution invalid or out of bounds. Using constrained optimization..."
   ))
@@ -128,7 +128,7 @@ test_that("fit_exhaustive_optimal_plot_size - handles small nr/nc dimensions", {
   expect_equal(result$w_opt, nc)
 })
 
-test_that("fit_exhaustive_optimal_plot_size - optimal plot size cannot be calculated", {
+test_that("fit_optimal_plot_size - optimal plot size cannot be calculated", {
   nr <- 1 # Small nr, making Length effectively constant
   nc <- 5 # Some variation in Width
   tau <- c(1, 1)
@@ -140,7 +140,7 @@ test_that("fit_exhaustive_optimal_plot_size - optimal plot size cannot be calcul
   sv <- expand.grid(Length = 1:nr, Width = 1:nc)
   sv$CV <- 10
   suppressWarnings(expect_warning(
-    result <- fit_exhaustive_optimal_plot_size(sv, nr, nc, include_interaction = TRUE, tau = tau),
+    result <- fit_optimal_plot_size(sv, nr, nc, include_interaction = TRUE, tau = tau),
     "Couldn't calculate optimal plot size"
   ))
   expect_true(is.na(result$h_star))

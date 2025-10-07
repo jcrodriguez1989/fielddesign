@@ -56,8 +56,8 @@ head(sv_exh, 10)
 
 ``` r
 # Calculate the optimal plot size.
-exh_ops_int <- fit_exhaustive_optimal_plot_size(sv_exh, nr, nc)
-exh_ops_no_int <- fit_exhaustive_optimal_plot_size(sv_exh, nr, nc, include_interaction = FALSE)
+exh_ops_int <- fit_optimal_plot_size(sv_exh, nr, nc)
+exh_ops_no_int <- fit_optimal_plot_size(sv_exh, nr, nc, include_interaction = FALSE)
 
 anova(exh_ops_no_int$fit, exh_ops_int$fit)
 ```
@@ -118,8 +118,8 @@ head(sv_tiling, 10)
 
 ``` r
 # Calculate the optimal plot size.
-opt_til_int_cont <- fit_exhaustive_optimal_plot_size(sv_tiling, nr, nc)
-opt_til_no_int_cont <- fit_exhaustive_optimal_plot_size(
+opt_til_int_cont <- fit_optimal_plot_size(sv_tiling, nr, nc)
+opt_til_no_int_cont <- fit_optimal_plot_size(
   sv_tiling, nr, nc,
   include_interaction = FALSE
 )

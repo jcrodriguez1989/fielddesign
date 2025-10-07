@@ -4,7 +4,7 @@
 #' (CV) across a grid of Length and Width values, based on a provided fitted model. It can
 #' optionally highlight specific points on the contour.
 #'
-#' @param fit A fitted model object (e.g., from `fit_exhaustive_optimal_plot_size`) that can
+#' @param fit A fitted model object (e.g., from `fit_optimal_plot_size`) that can
 #'   predict CV values.
 #' @param nr An integer, specifying the maximum number of rows (Length) for the grid.
 #' @param nc An integer, specifying the maximum number of columns (Width) for the grid.
@@ -28,7 +28,7 @@
 #' # Calculate the exhaustive spatial variation.
 #' sv_exh <- spatial_variation_exhaustive(x)$res
 #' # Calculate the optimal plot size.
-#' exh_ops <- fit_exhaustive_optimal_plot_size(sv_exh, nr, nc)
+#' exh_ops <- fit_optimal_plot_size(sv_exh, nr, nc)
 #' plot_cv_contour(
 #'   exh_ops$fit,
 #'   nr = nr, nc = nc,
@@ -40,7 +40,7 @@
 #' # Calculate the tiling spatial variation.
 #' sv_tiling <- spatial_variation_tiling(x)$res
 #' # Calculate the optimal plot size.
-#' tiling_ops <- fit_exhaustive_optimal_plot_size(sv_tiling, nr, nc)
+#' tiling_ops <- fit_optimal_plot_size(sv_tiling, nr, nc)
 #' plot_cv_contour(
 #'   tiling_ops$fit,
 #'   nr = nr, nc = nc,

@@ -32,19 +32,19 @@
 #' # Calculate the exhaustive spatial variation.
 #' sv_exh <- spatial_variation_exhaustive(x)$res
 #' # Calculate the optimal plot size.
-#' exh_ops <- fit_exhaustive_optimal_plot_size(sv_exh, nr, nc)
+#' exh_ops <- fit_optimal_plot_size(sv_exh, nr, nc)
 #' print(exh_ops)
 #' # Calculate the tiling spatial variation.
 #' sv_tiling <- spatial_variation_tiling(x)$res
 #' # Calculate the optimal plot size.
-#' tiling_ops <- fit_exhaustive_optimal_plot_size(sv_tiling, nr, nc)
+#' tiling_ops <- fit_optimal_plot_size(sv_tiling, nr, nc)
 #' print(tiling_ops)
 #' }
 #'
 #' @export
 #'
-fit_exhaustive_optimal_plot_size <- function(sv, nr, nc, include_interaction = TRUE,
-                                             tau = c(1, 1)) {
+fit_optimal_plot_size <- function(sv, nr, nc, include_interaction = TRUE,
+                                  tau = c(1, 1)) {
   form <- if (include_interaction) {
     as.formula("CV ~ Length + Width + I(Length^2) + I(Width^2) + Length:Width")
   } else {

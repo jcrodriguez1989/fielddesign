@@ -411,14 +411,14 @@ res_exh_no_int <- fit_quadratic_with_tau(
 )
 
 ### CancuCompare
-res_exh_int_new <- fielddesign::fit_exhaustive_optimal_plot_size(
+res_exh_int_new <- fielddesign::fit_optimal_plot_size(
   sv_exh_new, nr, nc,
   include_interaction = TRUE, tau = tau_vec
 )
 res_exh_int$A_star == res_exh_int_new$w_star && res_exh_int$L_star == res_exh_int_new$h_star &&
   res_exh_int$A_opt == res_exh_int_new$w_opt && res_exh_int$L_opt == res_exh_int_new$h_opt
 all.equal(unname(res_exh_int$fit$coefficients), unname(res_exh_int_new$fit$coefficients))
-res_exh_no_int_new <- fielddesign::fit_exhaustive_optimal_plot_size(
+res_exh_no_int_new <- fielddesign::fit_optimal_plot_size(
   sv_exh_new, nr, nc,
   include_interaction = FALSE, tau = tau_vec
 )
@@ -505,7 +505,7 @@ if (.can_fit_quad(datos_til, "C.V.")) {
     reg_int, tau = tau_vec, has_interaction = TRUE
   )
   ### CancuCompare
-  opt_til_int_cont_new <- fielddesign::fit_exhaustive_optimal_plot_size(
+  opt_til_int_cont_new <- fielddesign::fit_optimal_plot_size(
     sv_til_new, nr, nc,
     include_interaction = TRUE, tau = tau_vec
   )
@@ -515,7 +515,7 @@ if (.can_fit_quad(datos_til, "C.V.")) {
   opt_til_no_int_cont <- get_continuous_opt_from_fit_tiling(
     reg_no_int, tau = tau_vec, has_interaction = FALSE
   )
-  opt_til_no_int_cont_new <- fielddesign::fit_exhaustive_optimal_plot_size(
+  opt_til_no_int_cont_new <- fielddesign::fit_optimal_plot_size(
     sv_til_new, nr, nc,
     include_interaction = FALSE, tau = tau_vec
   )

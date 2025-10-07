@@ -49,11 +49,11 @@ tab_exh <- spatial_variation_exhaustive(
 message("\n[EXHAUSTIVO] Primeras filas:")
 print(head(tab_exh, 10))
 
-res_exh_int <- fit_exhaustive_optimal_plot_size(
+res_exh_int <- fit_optimal_plot_size(
   tab_exh, nr, nc,
   include_interaction = TRUE, tau = tau_vec
 )
-res_exh_no_int <- fit_exhaustive_optimal_plot_size(
+res_exh_no_int <- fit_optimal_plot_size(
   tab_exh, nr, nc,
   include_interaction = FALSE, tau = tau_vec
 )
@@ -94,11 +94,11 @@ print(utils::head(datos_til, 10))
 
 if (nrow(datos_til) >= 3) {
   # Óptimos continuos penalizados
-  opt_til_int <- fit_exhaustive_optimal_plot_size(
+  opt_til_int <- fit_optimal_plot_size(
     datos_til, nr, nc,
     include_interaction = TRUE, tau = tau_vec
   )
-  opt_til_no_int <- fit_exhaustive_optimal_plot_size(
+  opt_til_no_int <- fit_optimal_plot_size(
     datos_til, nr, nc,
     include_interaction = FALSE, tau = tau_vec
   )

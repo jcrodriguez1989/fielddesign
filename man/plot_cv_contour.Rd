@@ -17,7 +17,7 @@ plot_cv_contour(
 )
 }
 \arguments{
-\item{fit}{A fitted model object (e.g., from `fit_exhaustive_optimal_plot_size`) that can
+\item{fit}{A fitted model object (e.g., from `fit_optimal_plot_size`) that can
 predict CV values.}
 
 \item{nr}{An integer, specifying the maximum number of rows (Length) for the grid.}
@@ -55,7 +55,7 @@ x <- matrix(rnorm(nr * nc, 500, 60), nrow = nr, ncol = nc)
 # Calculate the exhaustive spatial variation.
 sv_exh <- spatial_variation_exhaustive(x)$res
 # Calculate the optimal plot size.
-exh_ops <- fit_exhaustive_optimal_plot_size(sv_exh, nr, nc)
+exh_ops <- fit_optimal_plot_size(sv_exh, nr, nc)
 plot_cv_contour(
   exh_ops$fit,
   nr = nr, nc = nc,
@@ -67,7 +67,7 @@ plot_cv_contour(
 # Calculate the tiling spatial variation.
 sv_tiling <- spatial_variation_tiling(x)$res
 # Calculate the optimal plot size.
-tiling_ops <- fit_exhaustive_optimal_plot_size(sv_tiling, nr, nc)
+tiling_ops <- fit_optimal_plot_size(sv_tiling, nr, nc)
 plot_cv_contour(
   tiling_ops$fit,
   nr = nr, nc = nc,
