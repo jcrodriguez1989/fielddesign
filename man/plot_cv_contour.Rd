@@ -9,8 +9,8 @@ plot_cv_contour(
   nr,
   nc,
   title = "CV Contour",
-  xlab = "Length (number of plots)",
-  ylab = "Width (number of plots)",
+  xlab = "Width (number of plots)",
+  ylab = "Length",
   mark = NULL,
   mark_col = "red",
   mark_lab = NULL
@@ -47,16 +47,24 @@ optionally highlight specific points on the contour.
 }
 \examples{
 \dontrun{
-# Assuming 'my_data' contains 'Length', 'Width', and 'CV' columns
-# And a model 'cv_model' has been fitted,
-# e.g., cv_model <- lm(CV ~ Length + Width, data = my_data)
-
-# Basic contour plot
-# plot_cv_contour(cv_model, nr = 10, nc = 10)
-
-# Contour plot with a marked point
-# marked_point <- data.frame(Length = 5, Width = 7)
-# plot_cv_contour(cv_model, nr = 10, nc = 10, mark = marked_point, mark_lab = "Optimal Design")
+# Generate simulated data.
+set.seed(420)
+nr <- 10
+nc <- 10
+x <- matrix(rnorm(nr * nc, 500, 60), nrow = nr, ncol = nc)
+# Calculate the exhaustive spatial variation.
+sv_exh <- spatial_variation_exhaustive(x)$res
+# Calculate the optimal plot size.
+exh_ops_int <- fit_exhaustive_optimal_plot_size(sv_exh, nr, nc)
+# Plot.
+plot_cv_contour(
+  exh_ops_int$fit,
+  nr = nr, nc = nc,
+  title = "EXHAUSTIVE — CV Contour (With interaction)",
+  mark = data.frame(Length = exh_ops_int$h_opt, Width = exh_ops_int$w_opt),
+  mark_col = "red",
+  mark_lab = paste0("optimal (L=", exh_ops_int$h_opt, ", W=", exh_ops_int$w_opt, ")")
+)
 }
 
 }

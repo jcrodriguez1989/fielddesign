@@ -127,3 +127,25 @@ test_that("fit_exhaustive_optimal_plot_size - handles small nr/nc dimensions", {
   expect_equal(result$h_opt, nr)
   expect_equal(result$w_opt, nc)
 })
+
+test_that("fit_exhaustive_optimal_plot_size - optimal plot size cannot be calculated", {
+  nr <- 1 # Small nr, making Length effectively constant
+  nc <- 5 # Some variation in Width
+  tau <- c(1, 1)
+  # Create `sv` data with constant CV. With Length being constant, and `include_interaction = TRUE`,
+  # the `lm` model will produce NA coefficients for `Length` and `I(Length^2)` due to collinearity
+  # with the intercept and `Length:Width` (which becomes `Width`). This should lead to problems
+  # with subsequent calculations in analytical and constrained solvers, yielding NAs
+  # for h_star/w_star and triggering the warning.
+  sv <- expand.grid(Length = 1:nr, Width = 1:nc)
+  sv$CV <- 10
+  suppressWarnings(expect_warning(
+    result <- fit_exhaustive_optimal_plot_size(sv, nr, nc, include_interaction = TRUE, tau = tau),
+    "Couldn't calculate optimal plot size"
+  ))
+  expect_true(is.na(result$h_star))
+  expect_true(is.na(result$w_star))
+  expect_true(is.na(result$h_opt))
+  expect_true(is.na(result$w_opt))
+  expect_true(is.na(result$method_used))
+})

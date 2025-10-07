@@ -20,16 +20,24 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Assuming 'my_data' contains 'Length', 'Width', and 'CV' columns
-#' # And a model 'cv_model' has been fitted,
-#' # e.g., cv_model <- lm(CV ~ Length + Width, data = my_data)
-#'
-#' # Basic contour plot
-#' # plot_cv_contour(cv_model, nr = 10, nc = 10)
-#'
-#' # Contour plot with a marked point
-#' # marked_point <- data.frame(Length = 5, Width = 7)
-#' # plot_cv_contour(cv_model, nr = 10, nc = 10, mark = marked_point, mark_lab = "Optimal Design")
+#' # Generate simulated data.
+#' set.seed(420)
+#' nr <- 10
+#' nc <- 10
+#' x <- matrix(rnorm(nr * nc, 500, 60), nrow = nr, ncol = nc)
+#' # Calculate the exhaustive spatial variation.
+#' sv_exh <- spatial_variation_exhaustive(x)$res
+#' # Calculate the optimal plot size.
+#' exh_ops_int <- fit_exhaustive_optimal_plot_size(sv_exh, nr, nc)
+#' # Plot.
+#' plot_cv_contour(
+#'   exh_ops_int$fit,
+#'   nr = nr, nc = nc,
+#'   title = "EXHAUSTIVE — CV Contour (With interaction)",
+#'   mark = data.frame(Length = exh_ops_int$h_opt, Width = exh_ops_int$w_opt),
+#'   mark_col = "red",
+#'   mark_lab = paste0("optimal (L=", exh_ops_int$h_opt, ", W=", exh_ops_int$w_opt, ")")
+#' )
 #' }
 #'
 #' @importFrom ggplot2 aes annotate coord_fixed geom_contour_filled geom_point ggplot labs
@@ -39,13 +47,13 @@
 #' @export
 #'
 plot_cv_contour <- function(fit, nr, nc, title = "CV Contour",
-                            xlab = "Length (number of plots)",
-                            ylab = "Width (number of plots)",
+                            xlab = "Width (number of plots)",
+                            ylab = "Length",
                             mark = NULL, mark_col = "red", mark_lab = NULL) {
   grid_df <- expand.grid(Length = seq_len(nr), Width = seq_len(nc))
   grid_df$CV_pred <- as.numeric(predict(fit, newdata = grid_df))
   grid_df <- subset(grid_df, is.finite(CV_pred))
-  p <- ggplot(grid_df, aes(Length, Width, z = CV_pred)) +
+  p <- ggplot(grid_df, aes(Width, Length, z = CV_pred)) +
     geom_contour_filled(bins = 12) +
     scale_fill_viridis_d(name = "CV pred") +
     coord_fixed(xlim = c(1, nr), ylim = c(1, nc), expand = FALSE) +
@@ -54,7 +62,7 @@ plot_cv_contour <- function(fit, nr, nc, title = "CV Contour",
   if (!is.null(mark)) {
     p <- p +
       geom_point(
-        data = mark, aes(Length, Width),
+        data = mark, aes(Width, Length),
         color = mark_col, size = 3, inherit.aes = FALSE
       )
     if (!is.null(mark_lab)) {
