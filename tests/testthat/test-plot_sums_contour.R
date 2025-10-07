@@ -15,7 +15,7 @@ mock_sv_exhaustive <- function() {
   )
   sv <- list(res = res_data, sums = sums_data)
   class(sv) <- c("sv_exhaustive", "sv")
-  return(sv)
+  sv
 }
 
 # Mock spatial_variation_tiling object for testing.
@@ -35,7 +35,7 @@ mock_sv_tiling <- function() {
   )
   sv <- list(res = res_data, sums = sums_data)
   class(sv) <- c("sv_tiling", "sv")
-  return(sv)
+  sv
 }
 
 test_that("plot_sums_contour stops for invalid sv object type", {
@@ -89,7 +89,7 @@ test_that("plot_sums_contour returns NULL invisibly and messages for unmatched w
   )
 })
 
-test_that("plot_sums_contour messages for exhaustive with swapped dimensions if CV not found directly", {
+test_that("plot_sums_contour messages for exhaustive with swapped dimensions if CV not found", {
   sv_exh <- mock_sv_exhaustive()
   # Trigger the message when width != length and CV for (width, length) is not directly found
   # but CV for (length, width) is found and sums_t is found.

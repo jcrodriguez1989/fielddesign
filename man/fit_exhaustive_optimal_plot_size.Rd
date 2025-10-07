@@ -39,3 +39,23 @@ obtained from exhaustive sliding window analysis, and then determines the optima
 analytical solution, and if that produces negative or out-of-bounds values, falls back to
 constrained numerical optimization.
 }
+\examples{
+\dontrun{
+# Generate simulated data.
+set.seed(420)
+nr <- 10
+nc <- 10
+x <- matrix(rnorm(nr * nc, 500, 60), nrow = nr, ncol = nc)
+# Calculate the exhaustive spatial variation.
+sv_exh <- spatial_variation_exhaustive(x)$res
+# Calculate the optimal plot size.
+exh_ops <- fit_exhaustive_optimal_plot_size(sv_exh, nr, nc)
+print(exh_ops)
+# Calculate the tiling spatial variation.
+sv_tiling <- spatial_variation_tiling(x)$res
+# Calculate the optimal plot size.
+tiling_ops <- fit_exhaustive_optimal_plot_size(sv_tiling, nr, nc)
+print(tiling_ops)
+}
+
+}

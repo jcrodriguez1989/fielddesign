@@ -55,15 +55,26 @@ x <- matrix(rnorm(nr * nc, 500, 60), nrow = nr, ncol = nc)
 # Calculate the exhaustive spatial variation.
 sv_exh <- spatial_variation_exhaustive(x)$res
 # Calculate the optimal plot size.
-exh_ops_int <- fit_exhaustive_optimal_plot_size(sv_exh, nr, nc)
-# Plot.
+exh_ops <- fit_exhaustive_optimal_plot_size(sv_exh, nr, nc)
 plot_cv_contour(
-  exh_ops_int$fit,
+  exh_ops$fit,
   nr = nr, nc = nc,
   title = "EXHAUSTIVE — CV Contour (With interaction)",
-  mark = data.frame(Length = exh_ops_int$h_opt, Width = exh_ops_int$w_opt),
+  mark = data.frame(Length = exh_ops$h_opt, Width = exh_ops$w_opt),
   mark_col = "red",
-  mark_lab = paste0("optimal (L=", exh_ops_int$h_opt, ", W=", exh_ops_int$w_opt, ")")
+  mark_lab = paste0("optimal (L=", exh_ops$h_opt, ", W=", exh_ops$w_opt, ")")
+)
+# Calculate the tiling spatial variation.
+sv_tiling <- spatial_variation_tiling(x)$res
+# Calculate the optimal plot size.
+tiling_ops <- fit_exhaustive_optimal_plot_size(sv_tiling, nr, nc)
+plot_cv_contour(
+  tiling_ops$fit,
+  nr = nr, nc = nc,
+  title = "TILING — CV Contour (With interaction)",
+  mark = data.frame(Length = tiling_ops$h_opt, Width = tiling_ops$w_opt),
+  mark_col = "red",
+  mark_lab = paste0("optimal (L=", tiling_ops$h_opt, ", W=", tiling_ops$w_opt, ")")
 )
 }
 

@@ -23,8 +23,10 @@
 #' x <- matrix(rnorm(nr * nc, 500, 60), nrow = nr, ncol = nc)
 #' # Calculate the exhaustive spatial variation.
 #' sv_exh <- spatial_variation_exhaustive(x, return_sums = TRUE)
-#' # Plot.
-#' plot_sums_contour(sv_exh, 1, 1)
+#' plot_sums_contour(sv_exh, 2, 1)
+#' # Calculate the tiling spatial variation.
+#' sv_tiling <- spatial_variation_tiling(x, return_sums = TRUE)
+#' plot_sums_contour(sv_tiling, 2, 1)
 #' }
 #'
 #' @importFrom ggplot2 aes coord_fixed geom_tile ggplot labs scale_fill_viridis_c scale_x_continuous
