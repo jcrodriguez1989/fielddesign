@@ -245,7 +245,7 @@ plot_cv_contour(
   title = "TILING — CV Contour (With interaction)",
   mark = mark_i,
   mark_col = "grey30",
-  mark_lab = if (is.null(mark_i)) NULL else paste0("optimo (L=", L_i, ", W=", W_i, ")")
+  mark_lab = if (is.null(mark_i)) NULL else paste0("optimal (L=", L_i, ", W=", W_i, ")")
 ) +
   ggplot2::annotate(
     "segment",
