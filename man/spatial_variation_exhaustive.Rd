@@ -37,7 +37,7 @@ It iterates through various window heights and widths, calculates sums using
 }
 \examples{
 # Create a sample matrix
-set.seed(123)
+set.seed(420)
 rows <- 7
 cols <- 13
 sample_matrix <- matrix(rnorm(rows * cols, 500, 60), nrow = rows, ncol = cols)

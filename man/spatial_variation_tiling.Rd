@@ -37,7 +37,7 @@ based on the method described by Smith (1938) or by considering only full blocks
 }
 \examples{
 # Create a sample matrix
-set.seed(123)
+set.seed(420)
 rows <- 7
 cols <- 13
 sample_matrix <- matrix(rnorm(rows * cols, 500, 60), nrow = rows, ncol = cols)

@@ -2,7 +2,9 @@
 
 test_that("function handles basic matrix input and returns expected structure", {
   x <- matrix(rnorm(4, 500, 60), 2, 2)
-  result <- spatial_variation_exhaustive(x)$res
+  result <- spatial_variation_exhaustive(x)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expect_s3_class(result, "data.frame")
   expect_true(nrow(result) > 0)
   expect_true(all(c("Length", "Width", "Size", "plots", "CV") %in% names(result)))
@@ -15,7 +17,9 @@ test_that("function handles basic matrix input and returns expected structure", 
 
 test_that("2x2 matrix combine_orientations=FALSE", {
   x <- matrix(rnorm(4, 500, 60), 2, 2)
-  result <- spatial_variation_exhaustive(x, combine_orientations = FALSE)$res
+  result <- spatial_variation_exhaustive(x, combine_orientations = FALSE)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2, 2),
     Width = c(1, 2, 1),
@@ -33,7 +37,9 @@ test_that("2x2 matrix combine_orientations=FALSE", {
 
 test_that("3x2 matrix combine_orientations=FALSE", {
   x <- matrix(rnorm(6, 500, 60), 3, 2)
-  result <- spatial_variation_exhaustive(x, combine_orientations = FALSE)$res
+  result <- spatial_variation_exhaustive(x, combine_orientations = FALSE)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2, 2, 3, 4),
     Width = c(1, 2, 1, 1, 2),
@@ -53,7 +59,9 @@ test_that("3x2 matrix combine_orientations=FALSE", {
 
 test_that("2x3 matrix combine_orientations=FALSE", {
   x <- matrix(rnorm(6, 500, 60), 2, 3)
-  result <- spatial_variation_exhaustive(x, combine_orientations = FALSE)$res
+  result <- spatial_variation_exhaustive(x, combine_orientations = FALSE)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2, 2, 3, 4),
     Width = c(1, 2, 1, 3, 2),
@@ -74,9 +82,11 @@ test_that("2x3 matrix combine_orientations=FALSE", {
 test_that("1x3 matrix combine_orientations=FALSE", {
   x <- matrix(rnorm(3, 500, 60), 1, 3)
   expect_warning(
-    result <- spatial_variation_exhaustive(x, combine_orientations = FALSE)$res,
+    result <- spatial_variation_exhaustive(x, combine_orientations = FALSE),
     "Transposing the input matrix to improve calculations"
   )
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2),
     Width = c(1, 1),
@@ -93,7 +103,9 @@ test_that("1x3 matrix combine_orientations=FALSE", {
 
 test_that("3x1 matrix combine_orientations=FALSE", {
   x <- matrix(rnorm(3, 500, 60), 3, 1)
-  result <- spatial_variation_exhaustive(x, combine_orientations = FALSE)$res
+  result <- spatial_variation_exhaustive(x, combine_orientations = FALSE)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2),
     Width = c(1, 1),
@@ -110,7 +122,9 @@ test_that("3x1 matrix combine_orientations=FALSE", {
 
 test_that("3x3 matrix combine_orientations=FALSE", {
   x <- matrix(rnorm(9, 500, 60), 3, 3)
-  result <- spatial_variation_exhaustive(x, combine_orientations = FALSE)$res
+  result <- spatial_variation_exhaustive(x, combine_orientations = FALSE)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2, 2, 3, 3, 4, 6, 6),
     Width = c(1, 2, 1, 3, 1, 2, 3, 2),
@@ -158,7 +172,9 @@ test_that("1x3 == 3x1 matrix combine_orientations=FALSE", {
 
 test_that("2x2 matrix combine_orientations=TRUE", {
   x <- matrix(rnorm(4, 500, 60), 2, 2)
-  result <- spatial_variation_exhaustive(x, combine_orientations = TRUE)$res
+  result <- spatial_variation_exhaustive(x, combine_orientations = TRUE)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2),
     Width = c(1, 2),
@@ -175,7 +191,9 @@ test_that("2x2 matrix combine_orientations=TRUE", {
 
 test_that("3x2 matrix combine_orientations=TRUE", {
   x <- matrix(rnorm(6, 500, 60), 3, 2)
-  result <- spatial_variation_exhaustive(x, combine_orientations = TRUE)$res
+  result <- spatial_variation_exhaustive(x, combine_orientations = TRUE)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2, 3, 4),
     Width = c(1, 2, 3, 2),
@@ -196,7 +214,9 @@ test_that("3x2 matrix combine_orientations=TRUE", {
 
 test_that("2x3 matrix combine_orientations=TRUE", {
   x <- matrix(rnorm(6, 500, 60), 2, 3)
-  result <- spatial_variation_exhaustive(x, combine_orientations = TRUE)$res
+  result <- spatial_variation_exhaustive(x, combine_orientations = TRUE)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2, 3, 4),
     Width = c(1, 2, 3, 2),
@@ -218,9 +238,11 @@ test_that("2x3 matrix combine_orientations=TRUE", {
 test_that("1x3 matrix combine_orientations=TRUE", {
   x <- matrix(rnorm(3, 500, 60), 1, 3)
   expect_warning(
-    result <- spatial_variation_exhaustive(x, combine_orientations = TRUE)$res,
+    result <- spatial_variation_exhaustive(x, combine_orientations = TRUE),
     "Transposing the input matrix to improve calculations"
   )
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2),
     Width = c(1, 2),
@@ -237,7 +259,9 @@ test_that("1x3 matrix combine_orientations=TRUE", {
 
 test_that("3x1 matrix combine_orientations=TRUE", {
   x <- matrix(rnorm(3, 500, 60), 3, 1)
-  result <- spatial_variation_exhaustive(x, combine_orientations = TRUE)$res
+  result <- spatial_variation_exhaustive(x, combine_orientations = TRUE)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2),
     Width = c(1, 2),
@@ -254,7 +278,9 @@ test_that("3x1 matrix combine_orientations=TRUE", {
 
 test_that("3x3 matrix combine_orientations=TRUE", {
   x <- matrix(rnorm(9, 500, 60), 3, 3)
-  result <- spatial_variation_exhaustive(x, combine_orientations = TRUE)$res
+  result <- spatial_variation_exhaustive(x, combine_orientations = TRUE)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2, 3, 4, 6),
     Width = c(1, 2, 3, 2, 3),
@@ -301,22 +327,26 @@ test_that("1x3 == 3x1 matrix combine_orientations=TRUE", {
 test_that("max_area parameter limits window sizes", {
   x <- matrix(rnorm(25, 500, 60), 5, 5)
   max_area_limit <- 10
-  result <- spatial_variation_exhaustive(x, max_area = max_area_limit)$res
+  result <- spatial_variation_exhaustive(x, max_area = max_area_limit)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   expect_true(all(result$Size <= max_area_limit))
   expect_true(all(result$Length * result$Width <= max_area_limit))
 })
 
 test_that("function stops with non-finite values in matrix", {
   expect_error(
-    spatial_variation_exhaustive(matrix(c(1, 2, NA, 4), 2, 2))$res,
+    expect_s3_class(spatial_variation_exhaustive(matrix(c(1, 2, NA, 4), 2, 2)), "sv_exhaustive"),
     "There are non-finite values in your input matrix"
   )
   expect_error(
-    spatial_variation_exhaustive(matrix(c(1, 2, Inf, 4), 2, 2))$res,
+    expect_s3_class(spatial_variation_exhaustive(matrix(c(1, 2, Inf, 4), 2, 2)), "sv_exhaustive"),
     "There are non-finite values in your input matrix"
   )
   expect_error(
-    expect_warning(spatial_variation_exhaustive(matrix(c(1, 2, "a", 4), 2, 2)))$res,
+    expect_s3_class(
+      expect_warning(spatial_variation_exhaustive(matrix(c(1, 2, "a", 4), 2, 2))), "sv_exhaustive"
+    ),
     "There are non-finite values in your input matrix"
   )
 })
@@ -358,14 +388,18 @@ test_that("function warns and transposes for single row matrix, and correctly pr
 
 test_that("empty matrix or single element matrix returns empty data frame", {
   empty_matrix <- matrix(numeric(0), nrow = 0, ncol = 0)
-  result_empty <- spatial_variation_exhaustive(empty_matrix)$res
+  result_empty <- spatial_variation_exhaustive(empty_matrix)
+  expect_s3_class(result_empty, "sv_exhaustive")
+  result_empty <- result_empty$res
   expect_s3_class(result_empty, "data.frame")
   expect_equal(nrow(result_empty), 0)
 })
 
 test_that("matrix with all same values has CV of 0", {
   matrix_same_values <- matrix(500, nrow = 3, ncol = 3)
-  result <- spatial_variation_exhaustive(matrix_same_values)$res
+  result <- spatial_variation_exhaustive(matrix_same_values)
+  expect_s3_class(result, "sv_exhaustive")
+  result <- result$res
   # Expect CV to be 0 or very close to 0 due to floating point arithmetic
   expect_true(all(result$CV < .Machine$double.eps^0.5))
 })

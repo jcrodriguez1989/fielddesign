@@ -2,7 +2,9 @@
 
 test_that("spatial_variation_tiling calculates variation correctly with default exclusion", {
   x <- matrix(rnorm(4, 500, 60), 2, 2)
-  result <- spatial_variation_tiling(x)$res
+  result <- spatial_variation_tiling(x)
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 1)
   expect_equal(colnames(result), c("Size", "Width", "Length", "plots", "Vx", "CV"))
@@ -17,7 +19,9 @@ test_that("spatial_variation_tiling calculates variation correctly with default 
 test_that("2x2 matrix smith", {
   x <- matrix(rnorm(4, 500, 60), 2, 2)
   x_dim <- nrow(x) * ncol(x)
-  result <- spatial_variation_tiling(x, exclusion = "smith")$res
+  result <- spatial_variation_tiling(x, exclusion = "smith")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expected <- data.frame(
     Size = c(1),
     Width = c(1),
@@ -33,7 +37,9 @@ test_that("2x2 matrix smith", {
 test_that("3x2 matrix exclusion='smith'", {
   x <- matrix(rnorm(6, 500, 60), 3, 2)
   x_dim <- nrow(x) * ncol(x)
-  result <- spatial_variation_tiling(x, exclusion = "smith")$res
+  result <- spatial_variation_tiling(x, exclusion = "smith")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expected <- data.frame(
     Size = c(1),
     Width = c(1),
@@ -49,7 +55,9 @@ test_that("3x2 matrix exclusion='smith'", {
 test_that("2x3 matrix exclusion='smith'", {
   x <- matrix(rnorm(6, 500, 60), 2, 3)
   x_dim <- nrow(x) * ncol(x)
-  result <- spatial_variation_tiling(x, exclusion = "smith")$res
+  result <- spatial_variation_tiling(x, exclusion = "smith")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expected <- data.frame(
     Size = c(1),
     Width = c(1),
@@ -64,20 +72,26 @@ test_that("2x3 matrix exclusion='smith'", {
 
 test_that("1x3 matrix exclusion='smith'", {
   x <- matrix(rnorm(3, 500, 60), 1, 3)
-  result <- spatial_variation_tiling(x, exclusion = "smith")$res
+  result <- spatial_variation_tiling(x, exclusion = "smith")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expect_equal(result, data.frame())
 })
 
 test_that("3x1 matrix exclusion='smith'", {
   x <- matrix(rnorm(3, 500, 60), 3, 1)
-  result <- spatial_variation_tiling(x, exclusion = "smith")$res
+  result <- spatial_variation_tiling(x, exclusion = "smith")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expect_equal(result, data.frame())
 })
 
 test_that("3x3 matrix exclusion='smith'", {
   x <- matrix(rnorm(9, 500, 60), 3, 3)
   x_dim <- nrow(x) * ncol(x)
-  result <- spatial_variation_tiling(x, exclusion = "smith")$res
+  result <- spatial_variation_tiling(x, exclusion = "smith")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expected <- data.frame(
     Size = c(1),
     Width = c(1),
@@ -93,7 +107,9 @@ test_that("3x3 matrix exclusion='smith'", {
 test_that("4x4 matrix exclusion='smith'", {
   x <- matrix(rnorm(16, 500, 60), 4, 4)
   x_dim <- nrow(x) * ncol(x)
-  result <- spatial_variation_tiling(x, exclusion = "smith")$res
+  result <- spatial_variation_tiling(x, exclusion = "smith")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2, 2, 4),
     Width = c(1, 1, 2, 2),
@@ -137,7 +153,9 @@ test_that("1x3 == 3x1 matrix exclusion='smith'", {
 test_that("2x2 matrix only_full", {
   x <- matrix(rnorm(4, 500, 60), 2, 2)
   x_dim <- nrow(x) * ncol(x)
-  result <- spatial_variation_tiling(x, exclusion = "only_full")$res
+  result <- spatial_variation_tiling(x, exclusion = "only_full")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2, 2),
     Width = c(1, 1, 2),
@@ -158,7 +176,9 @@ test_that("2x2 matrix only_full", {
 test_that("3x2 matrix exclusion='only_full'", {
   x <- matrix(rnorm(6, 500, 60), 3, 2)
   x_dim <- nrow(x) * ncol(x)
-  result <- spatial_variation_tiling(x, exclusion = "only_full")$res
+  result <- spatial_variation_tiling(x, exclusion = "only_full")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2, 3),
     Width = c(1, 2, 1),
@@ -179,7 +199,9 @@ test_that("3x2 matrix exclusion='only_full'", {
 test_that("2x3 matrix exclusion='only_full'", {
   x <- matrix(rnorm(6, 500, 60), 2, 3)
   x_dim <- nrow(x) * ncol(x)
-  result <- spatial_variation_tiling(x, exclusion = "only_full")$res
+  result <- spatial_variation_tiling(x, exclusion = "only_full")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2, 3),
     Width = c(1, 1, 3),
@@ -200,7 +222,9 @@ test_that("2x3 matrix exclusion='only_full'", {
 test_that("1x3 matrix exclusion='only_full'", {
   x <- matrix(rnorm(3, 500, 60), 1, 3)
   x_dim <- nrow(x) * ncol(x)
-  result <- spatial_variation_tiling(x, exclusion = "only_full")$res
+  result <- spatial_variation_tiling(x, exclusion = "only_full")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expected <- data.frame(
     Size = c(1),
     Width = c(1),
@@ -216,7 +240,9 @@ test_that("1x3 matrix exclusion='only_full'", {
 test_that("3x1 matrix exclusion='only_full'", {
   x <- matrix(rnorm(3, 500, 60), 3, 1)
   x_dim <- nrow(x) * ncol(x)
-  result <- spatial_variation_tiling(x, exclusion = "only_full")$res
+  result <- spatial_variation_tiling(x, exclusion = "only_full")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expected <- data.frame(
     Size = c(1),
     Width = c(1),
@@ -232,7 +258,9 @@ test_that("3x1 matrix exclusion='only_full'", {
 test_that("3x3 matrix exclusion='only_full'", {
   x <- matrix(rnorm(9, 500, 60), 3, 3)
   x_dim <- nrow(x) * ncol(x)
-  result <- spatial_variation_tiling(x, exclusion = "only_full")$res
+  result <- spatial_variation_tiling(x, exclusion = "only_full")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 3, 3),
     Width = c(1, 1, 3),
@@ -253,7 +281,9 @@ test_that("3x3 matrix exclusion='only_full'", {
 test_that("4x4 matrix exclusion='only_full'", {
   x <- matrix(rnorm(16, 500, 60), 4, 4)
   x_dim <- nrow(x) * ncol(x)
-  result <- spatial_variation_tiling(x, exclusion = "only_full")$res
+  result <- spatial_variation_tiling(x, exclusion = "only_full")
+  expect_s3_class(result, "sv_tiling")
+  result <- result$res
   expected <- data.frame(
     Size = c(1, 2, 2, 4, 4, 4, 8, 8),
     Width = c(1, 1, 2, 1, 2, 4, 2, 4),

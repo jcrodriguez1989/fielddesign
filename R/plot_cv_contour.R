@@ -56,7 +56,7 @@ plot_cv_contour <- function(fit, nr, nc, title = "CV Contour",
   p <- ggplot(grid_df, aes(Width, Length, z = CV_pred)) +
     geom_contour_filled(bins = 12) +
     scale_fill_viridis_d(name = "CV pred") +
-    coord_fixed(xlim = c(1, nr), ylim = c(1, nc), expand = FALSE) +
+    coord_fixed(expand = FALSE) +
     theme_minimal(base_size = 12) +
     labs(title = title, x = xlab, y = ylab)
   if (!is.null(mark)) {

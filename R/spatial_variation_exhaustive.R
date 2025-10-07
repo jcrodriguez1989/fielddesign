@@ -20,7 +20,7 @@
 #'
 #' @examples
 #' # Create a sample matrix
-#' set.seed(123)
+#' set.seed(420)
 #' rows <- 7
 #' cols <- 13
 #' sample_matrix <- matrix(rnorm(rows * cols, 500, 60), nrow = rows, ncol = cols)
@@ -81,12 +81,15 @@ spatial_variation_exhaustive <- function(x, combine_orientations = TRUE, max_are
   sums_df <- do.call(rbind, lapply(tab, function(x) do.call(rbind, lapply(x, function(y) y$sums))))
   tab <- do.call(rbind, lapply(tab, function(x) do.call(rbind, lapply(x, function(y) y$res))))
   if (is.null(tab)) {
-    return(list(res = data.frame()))
+    res <- list(res = data.frame())
+    class(res) <- "sv_exhaustive"
+    return(res)
   }
   rownames(tab) <- paste(tab$Length, tab$Width, sep = "x")
   res <- list(res = tab[order(tab$Size, tab$Length, tab$Width), ])
   if (return_sums) {
     res$sums <- sums_df
   }
+  class(res) <- "sv_exhaustive"
   res
 }

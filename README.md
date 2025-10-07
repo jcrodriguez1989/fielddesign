@@ -26,26 +26,33 @@ library("fielddesign")
 
 # Generate simulated data.
 set.seed(420)
-nr <- 10
+nr <- 12
 nc <- 10
 x <- matrix(rnorm(nr * nc, 500, 60), nrow = nr, ncol = nc)
 
+# Plot the yield data.
+plot_yield_contour(x)
+```
+
+![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+``` r
 # Calculate the exhaustive spatial variation.
 sv_exh <- spatial_variation_exhaustive(x)$res
 head(sv_exh, 10)
 ```
 
     ##     Size Width Length plots        CV
-    ## 1x1    1     1      1   100 11.897102
-    ## 1x2    2     2      1   180  8.579357
-    ## 1x3    3     3      1   160  6.970354
-    ## 1x4    4     4      1   140  6.061826
-    ## 2x2    4     2      2    81  5.712922
-    ## 1x5    5     5      1   120  5.425039
-    ## 1x6    6     6      1   100  5.137315
-    ## 2x3    6     3      2   144  4.409514
-    ## 1x7    7     7      1    80  4.950361
-    ## 1x8    8     8      1    60  4.965055
+    ## 1x1    1     1      1   120 12.663951
+    ## 1x2    2     2      1   218  9.080967
+    ## 1x3    3     3      1   196  7.320735
+    ## 1x4    4     4      1   174  6.192881
+    ## 2x2    4     2      2    99  6.305336
+    ## 1x5    5     5      1   152  5.512580
+    ## 1x6    6     6      1   130  5.141173
+    ## 2x3    6     3      2   178  4.958025
+    ## 1x7    7     7      1   108  4.937079
+    ## 1x8    8     8      1    86  4.688225
 
 ``` r
 # Calculate the optimal plot size.
@@ -60,16 +67,16 @@ anova(exh_ops_no_int$fit, exh_ops_int$fit)
     ## Model 1: CV ~ Length + Width + I(Length^2) + I(Width^2)
     ## Model 2: CV ~ Length + Width + I(Length^2) + I(Width^2) + Length:Width
     ##   Res.Df    RSS Df Sum of Sq      F Pr(>F)
-    ## 1     49 21.459                           
-    ## 2     48 21.259  1   0.20104 0.4539 0.5037
+    ## 1     69 36.205                           
+    ## 2     68 35.262  1   0.94293 1.8184  0.182
 
 ``` r
 AIC(exh_ops_no_int$fit, exh_ops_int$fit)
 ```
 
     ##                    df      AIC
-    ## exh_ops_no_int$fit  6 115.4133
-    ## exh_ops_int$fit     7 116.9050
+    ## exh_ops_no_int$fit  6 169.1021
+    ## exh_ops_int$fit     7 169.1492
 
 ``` r
 message(sprintf(
@@ -79,7 +86,7 @@ message(sprintf(
 ))
 ```
 
-    ##  With interaction  (continuous): L*= 2.96 W*= 2.76  | rounded: 3 3
+    ##  With interaction  (continuous): L*= 2.97 W*= 1.02  | rounded: 3 2
 
 ``` r
 message(sprintf(
@@ -89,7 +96,7 @@ message(sprintf(
 ))
 ```
 
-    ##  Without interaction  (continuous): L*= 2.60 W*= 3.10  | rounded: 3 4
+    ##  Without interaction  (continuous): L*= 1.99 W*= 2.11  | rounded: 2 3
 
 ``` r
 # Calculate the tiling spatial variation.
@@ -98,15 +105,16 @@ head(sv_tiling, 10)
 ```
 
     ##     Size Width Length plots        Vx        CV
-    ## 1x1    1     1      1   100 3409.1360 11.897102
-    ## 2x1    2     1      2    50 2019.2620  9.156201
-    ## 1x2    2     2      1    50 1820.7005  8.694373
-    ## 2x2    4     2      2    25 1076.3229  6.684829
-    ## 5x1    5     1      5    20  760.2716  5.618280
-    ## 1x5    5     5      1    20  875.6205  6.029440
-    ## 5x2   10     2      5    10  296.6973  3.509747
-    ## 2x5   10     5      2    10  383.6330  3.990956
-    ## 5x5   25     5      5     4  125.6903  2.284388
+    ## 1x1    1     1      1   120 3869.7700 12.663951
+    ## 2x1    2     1      2    60 2120.9326  9.375406
+    ## 1x2    2     2      1    60 1722.0348  8.447877
+    ## 3x1    3     1      3    40 1186.2386  7.011528
+    ## 4x1    4     1      4    30 1045.3686  6.582053
+    ## 2x2    4     2      2    30  963.3321  6.318510
+    ## 1x5    5     5      1    24  717.7742  5.454068
+    ## 6x1    6     1      6    20  556.6588  4.803095
+    ## 3x2    6     2      3    20  347.2369  3.793495
+    ## 4x2    8     2      4    15  249.6181  3.216360
 
 ``` r
 # Calculate the optimal plot size.
@@ -126,7 +134,7 @@ message(sprintf(
 ))
 ```
 
-    ##  With interaction  (continuous): L*= 3.30 W*= 3.11  | rounded: 4 4
+    ##  With interaction  (continuous): L*= 3.67 W*= 3.09  | rounded: 4 4
 
 ``` r
 message(sprintf(
@@ -136,7 +144,7 @@ message(sprintf(
 ))
 ```
 
-    ##  Without interaction  (continuous): L*= 3.40 W*= 3.21  | rounded: 4 4
+    ##  Without interaction  (continuous): L*= 3.78 W*= 3.14  | rounded: 4 4
 
 ``` r
 # Models comparison.
@@ -154,9 +162,9 @@ anova(reg_no_int, reg_int)
     ## 
     ## Model 1: CV ~ Length + Width + I(Length^2) + I(Width^2)
     ## Model 2: CV ~ Length + Width + I(Length^2) + I(Width^2) + Length:Width
-    ##   Res.Df     RSS Df Sum of Sq      F   Pr(>F)   
-    ## 1      4 1.81786                                
-    ## 2      3 0.11023  1    1.7076 46.474 0.006457 **
+    ##   Res.Df    RSS Df Sum of Sq      F  Pr(>F)  
+    ## 1     10 6.0226                              
+    ## 2      9 2.9334  1    3.0892 9.4779 0.01317 *
     ## ---
     ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
@@ -164,9 +172,9 @@ anova(reg_no_int, reg_int)
 AIC(reg_no_int, reg_int)
 ```
 
-    ##            df        AIC
-    ## reg_no_int  6 23.1448358
-    ## reg_int     7 -0.0806092
+    ##            df      AIC
+    ## reg_no_int  6 40.88023
+    ## reg_int     7 32.08994
 
 ``` r
 sv_exh_cmp <- sv_exh[, c("Length", "Width", "Size", "CV")]
@@ -177,19 +185,19 @@ comp <- merge(sv_exh_cmp, tab_til_cmp, by = c("Length", "Width"))
 message(sprintf("n intersection = %d", nrow(comp)))
 ```
 
-    ## n intersection = 6
+    ## n intersection = 7
 
 ``` r
 message(sprintf("Correlation: %.4f", cor(comp$CV_exh, comp$CV_til, use = "complete.obs")))
 ```
 
-    ## Correlation: 0.9976
+    ## Correlation: 0.9857
 
 ``` r
 message(sprintf("Mean bias (exh - til): %.4f", mean(comp$CV_exh - comp$CV_til, na.rm = TRUE)))
 ```
 
-    ## Mean bias (exh - til): -0.4924
+    ## Mean bias (exh - til): -0.0480
 
 ``` r
 message(
@@ -197,7 +205,7 @@ message(
 )
 ```
 
-    ## Median bias (exh - til): -0.6016
+    ## Median bias (exh - til): 0.0115
 
 ``` r
 # CV Plots.
@@ -211,7 +219,7 @@ plot_cv_contour(
 )
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
 
 ``` r
 plot_cv_contour(
@@ -224,7 +232,7 @@ plot_cv_contour(
 )
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->
 
 ``` r
 # Tiling.
@@ -253,7 +261,7 @@ plot_cv_contour(
   )
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-2-4.png)<!-- -->
 
 ## Compare with `agricolae::index.smith()`
 

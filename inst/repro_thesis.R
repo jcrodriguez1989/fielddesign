@@ -27,7 +27,7 @@ if (file.exists(ruta_blanco)) {
   blanco <- as.matrix(read.table(ruta_blanco))
   message("Se cargo '", ruta_blanco, "' con dimensiones: ", nrow(blanco), " x ", ncol(blanco))
 } else {
-  set.seed(123)
+  set.seed(420)
   blanco <- matrix(rnorm(100, 500, 60), nrow = 10, ncol = 10) # ejemplo 10x10
   message(
     "No se encontro '", ruta_blanco, "'. Se genero matriz simulada ",
@@ -94,28 +94,28 @@ print(utils::head(datos_til, 10))
 
 if (nrow(datos_til) >= 3) {
   # Óptimos continuos penalizados
-  opt_til_int_cont <- fit_exhaustive_optimal_plot_size(
+  opt_til_int <- fit_exhaustive_optimal_plot_size(
     datos_til, nr, nc,
     include_interaction = TRUE, tau = tau_vec
   )
-  opt_til_no_int_cont <- fit_exhaustive_optimal_plot_size(
+  opt_til_no_int <- fit_exhaustive_optimal_plot_size(
     datos_til, nr, nc,
     include_interaction = FALSE, tau = tau_vec
   )
 
-  reg_int <- opt_til_int_cont$fit
-  reg_no_int <- opt_til_no_int_cont$fit
+  reg_int <- opt_til_int$fit
+  reg_no_int <- opt_til_no_int$fit
 
   message("\n[TILING] Optimos (grad CV = -tau)")
   message(sprintf(
     " CON interaccion  (continuo): L*= %.2f W*= %.2f  | redondeado: %d %d",
-    opt_til_int_cont$h_star, opt_til_int_cont$w_star,
-    as.integer(ceiling(opt_til_int_cont$h_star)), as.integer(ceiling(opt_til_int_cont$w_star))
+    opt_til_int$h_star, opt_til_int$w_star,
+    as.integer(ceiling(opt_til_int$h_star)), as.integer(ceiling(opt_til_int$w_star))
   ))
   message(sprintf(
     " SIN interaccion  (continuo): L*= %.2f W*= %.2f  | redondeado: %d %d",
-    opt_til_no_int_cont$h_star, opt_til_no_int_cont$w_star,
-    as.integer(ceiling(opt_til_no_int_cont$h_star)), as.integer(ceiling(opt_til_no_int_cont$w_star))
+    opt_til_no_int$h_star, opt_til_no_int$w_star,
+    as.integer(ceiling(opt_til_no_int$h_star)), as.integer(ceiling(opt_til_no_int$w_star))
   ))
 
   # Comparación de modelos TILING
@@ -125,8 +125,8 @@ if (nrow(datos_til) >= 3) {
 } else {
   reg_int <- NULL
   reg_no_int <- NULL
-  opt_til_int_cont <- NULL
-  opt_til_no_int_cont <- NULL
+  opt_til_int <- NULL
+  opt_til_no_int <- NULL
   warning(sprintf(
     "[TILING] Solo %d tamaños. No se ajustan modelos cuadraticos; omitiendo optimizacion.",
     nrow(datos_til)
@@ -177,8 +177,8 @@ plot_2 <- plot_cv_contour(
 # ------ TILING (solo si hay modelos)
 plot_3 <- NULL
 if (!is.null(reg_int)) {
-  L_i <- ceiling(opt_til_int_cont$h_star)
-  W_i <- ceiling(opt_til_int_cont$w_star)
+  L_i <- ceiling(opt_til_int$h_star)
+  W_i <- ceiling(opt_til_int$w_star)
   mark_i <- if (is.na(L_i) || is.na(W_i)) NULL else data.frame(Length = L_i, Width = W_i)
   plot_3 <- plot_cv_contour(
     reg_int,
@@ -242,8 +242,8 @@ if (make_plots) {
 #########################################################################
 
 # Óptimo continuo redondeado hacia arriba
-L_n <- as.integer(ceiling(as.numeric(opt_til_no_int_cont$h_star)))
-W_n <- as.integer(ceiling(as.numeric(opt_til_no_int_cont$w_star))) # ancho
+L_n <- as.integer(ceiling(as.numeric(opt_til_no_int$h_star)))
+W_n <- as.integer(ceiling(as.numeric(opt_til_no_int$w_star))) # ancho
 
 # Grilla de predicción
 grid_til_no <- expand.grid(Length = seq_len(nr), Width = seq_len(nc))
@@ -289,7 +289,7 @@ print(plot_4)
 ## Ayudas de verificacion (exhaustivo)
 check_exhaustive_counts <- function(verbose = TRUE) {
   expected_windows <- function(nr, nc, L, W) max(nr - L + 1, 0) * max(nc - W + 1, 0)
-  set.seed(1)
+  set.seed(420)
   Y <- matrix(sample(1:9, 20, replace = TRUE), nrow = 4, ncol = 5)
   s12 <- fielddesign:::sliding_window_sum(Y, 1, 2, combine_orientations = FALSE)$res
   s21 <- fielddesign:::sliding_window_sum(Y, 2, 1, combine_orientations = FALSE)$res

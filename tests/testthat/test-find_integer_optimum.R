@@ -165,7 +165,7 @@ test_that("find_integer_optimum handles non-finite values in tau_vec", {
 })
 
 test_that("find_integer_optimum works with a complex quadratic formula", {
-  set.seed(123)
+  set.seed(420)
   x <- data.frame(
     Length = c(2, 5, 8, 2, 5, 8, 2, 5, 8),
     Width = c(2, 2, 2, 5, 5, 5, 8, 8, 8),
@@ -185,7 +185,7 @@ test_that("find_integer_optimum works with a complex quadratic formula", {
   )
   expect_equal(result_quadratic$h_opt, 5)
   expect_equal(result_quadratic$w_opt, 5)
-  expect_equal(round(result_quadratic$pred_at_opt, 3), 0.101, ignore_attr = TRUE)
+  expect_equal(round(result_quadratic$pred_at_opt, 3), 0.1, ignore_attr = TRUE)
 
   # Add another case with penalties
   tau_vec_quad_penalty <- c(0.01, 0.01)
@@ -197,7 +197,7 @@ test_that("find_integer_optimum works with a complex quadratic formula", {
   )
   expect_equal(result_quadratic_penalty$h_opt, 5)
   expect_equal(result_quadratic_penalty$w_opt, 5)
-  expect_equal(round(result_quadratic_penalty$pred_at_opt, 3), 0.101, ignore_attr = TRUE)
+  expect_equal(round(result_quadratic_penalty$pred_at_opt, 3), 0.1, ignore_attr = TRUE)
 })
 
 test_that("find_integer_optimum works with tau_vec = c(1, 1)", {

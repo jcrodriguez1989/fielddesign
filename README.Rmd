@@ -26,9 +26,12 @@ library("fielddesign")
 
 # Generate simulated data.
 set.seed(420)
-nr <- 10
+nr <- 12
 nc <- 10
 x <- matrix(rnorm(nr * nc, 500, 60), nrow = nr, ncol = nc)
+
+# Plot the yield data.
+plot_yield_contour(x)
 
 # Calculate the exhaustive spatial variation.
 sv_exh <- spatial_variation_exhaustive(x)$res

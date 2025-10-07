@@ -270,7 +270,7 @@ fit_quadratic_with_tau <- function(tabla_arch,
 ## Ayudas de verificacion (exhaustivo)
 check_exhaustive_counts <- function(verbose = TRUE) {
   expected_windows <- function(nr, nc, L, W) max(nr - L + 1, 0) * max(nc - W + 1, 0)
-  set.seed(1)
+  set.seed(420)
   Y <- matrix(sample(1:9, 20, replace = TRUE), nrow = 4, ncol = 5)
   s12 <- collect_sums_arch(Y, 1, 2, combine_orientations = FALSE)
   s21 <- collect_sums_arch(Y, 2, 1, combine_orientations = FALSE)
@@ -371,7 +371,7 @@ if (file.exists(ruta_blanco)) {
   blanco <- as.matrix(read.table(ruta_blanco))
   message("Se cargo '", ruta_blanco, "' con dimensiones: ", nrow(blanco), " x ", ncol(blanco))
 } else {
-  set.seed(123)
+  set.seed(420)
   blanco <- matrix(rnorm(100, 500, 60), nrow = 10, ncol = 10) # ejemplo 10x10
   message(
     "No se encontro '", ruta_blanco, "'. Se genero matriz simulada ",

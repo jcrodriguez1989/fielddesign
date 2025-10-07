@@ -25,7 +25,7 @@
 #'
 #' @examples
 #' # Create a sample matrix
-#' set.seed(123)
+#' set.seed(420)
 #' rows <- 7
 #' cols <- 13
 #' sample_matrix <- matrix(rnorm(rows * cols, 500, 60), nrow = rows, ncol = cols)
@@ -99,7 +99,9 @@ spatial_variation_tiling <- function(x, exclusion = c("smith", "only_full"), ret
   sums_df <- do.call(rbind, lapply(res, function(r) r$sums))
   res <- lapply(res, function(r) r$result)
   if (length(res) == 0) {
-    return(list(res = data.frame()))
+    res <- list(res = data.frame())
+    class(res) <- "sv_tiling"
+    return(res)
   }
   out <- do.call(rbind, res)
   rownames(out) <- paste(out$Length, out$Width, sep = "x")
@@ -107,5 +109,6 @@ spatial_variation_tiling <- function(x, exclusion = c("smith", "only_full"), ret
   if (return_sums) {
     res$sums <- sums_df
   }
+  class(res) <- "sv_tiling"
   res
 }
