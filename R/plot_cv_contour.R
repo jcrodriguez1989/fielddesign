@@ -78,7 +78,7 @@ plot_cv_contour <- function(fit, nr, nc, title = "CV Contour",
       )
     if (!is.null(mark_lab)) {
       p <- p + annotate("text",
-        x = mark$Length[[1]], y = mark$Width[[1]],
+        x = mark$Width[[1]], y = mark$Length[[1]],
         label = mark_lab, vjust = -1, color = mark_col
       )
     }
