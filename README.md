@@ -279,3 +279,29 @@ all.equal(sv_tiling_a, as.matrix(sv_tiling))
 ```
 
     ## [1] TRUE
+
+``` r
+# With synthetic data.
+grids <- expand.grid(Length = 1:20, Width = 1:20)
+# Sample 25 dimension for the tests.
+testing_grids <- grids[sample(nrow(grids), 25), ]
+test_results <- sapply(seq_len(nrow(testing_grids)), function(i) {
+  testing_grid <- testing_grids[i, ]
+  nr <- testing_grid$Length
+  nc <- testing_grid$Width
+  x <- matrix(rnorm(nr * nc, 500, 60), nrow = nr, ncol = nc)
+  # Check that our method and index.smith are the same.
+  sv_tiling <- fielddesign::spatial_variation_tiling(x)$res
+  sv_tiling_a <- try(agricolae::index.smith(x, PLOT = FALSE)$uniformity, silent = TRUE)
+  # Make the structures comparable.
+  rownames(sv_tiling) <- NULL
+  if (nrow(sv_tiling) > 0) {
+    sv_tiling$CV <- round(sv_tiling$CV, 1)
+  }
+  # Checks if results are equal or, if it failed to get calculated by agricolae.
+  inherits(sv_tiling_a, "try-error") || all.equal(sv_tiling_a, as.matrix(sv_tiling))
+})
+all(test_results)
+```
+
+    ## [1] TRUE
