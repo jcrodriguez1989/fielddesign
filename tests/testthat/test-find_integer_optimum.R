@@ -90,7 +90,6 @@ test_that("find_integer_optimum incorporates tau_vec penalties correctly", {
   )
 
 
-
   # Let's adjust tau to strongly favor smaller values and test
   tau_vec_strong_penalty <- c(0.05, 0.1)
   result_strong_penalty <- find_integer_optimum(

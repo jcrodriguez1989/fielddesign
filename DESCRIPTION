@@ -21,7 +21,7 @@ Description: Provides functions for analyzing spatial variation in field experim
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Imports:
   bslib,
   DT,
@@ -34,3 +34,5 @@ Imports:
 Suggests:
   testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Depends: 
+    R (>= 3.5)
